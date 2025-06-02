@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookMate – Your AI Reading Companion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>BookMate</h1>
+    </header>
+    <div class="container">
+        <aside class="sidebar left">
+            <h2>Recent Searches</h2>
+            <ul id="recent-searches"></ul>
+        </aside>
+        <main class="main-content">
+            <div class="center-box">
+                <h2 class="subtitle">BookMate – Your AI Reading Companion</h2>
+                <div class="search-bar">
+                    <input type="text" id="book-input" placeholder="Enter book name...">
+                    <button onclick="searchBook()">Search</button>
+                </div>
+                <div class="summary-box" id="summary-box">
+                    <h3>Book Summary</h3>
+                    <p id="summary">Search a book to get its summary here.</p>
+                    <div class="action-buttons">
+                        <button onclick="openGoogle()">Download</button>
+                        <button onclick="openYouTube('summary')">Summary</button>
+                        <button onclick="openYouTube('audiobook')">Audiobook</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <aside class="sidebar right">
+            <h2>Recommendations</h2>
+            <ul id="recommendations"></ul>
+        </aside>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
