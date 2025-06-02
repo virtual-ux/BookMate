@@ -1,6 +1,6 @@
 exports.handler = async (event) => {
   const book = event.queryStringParameters.book;
-  const apiKey = "YOUR_SERPAPI_KEY_HERE"; // replace with your real key
+  const apiKey = "2f4a2c51026cecfaee418b72db691b80da14f3acc7c8b4d890de5e918c944481"; // replace with your real key
 
   const url = `https://serpapi.com/search.json?q=${encodeURIComponent(book)} book&api_key=${apiKey}`;
 
