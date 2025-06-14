@@ -28,28 +28,31 @@ function searchBook() {
 
   fetch(`/.netlify/functions/summary?book=${encodeURIComponent(book)}`)
     .then((res) => res.json())
-    .then((data) => {
-      const maxWords = 50;
-      const cleanText = data.summary.replace(/<[^>]*>/g, ''); // Strip HTML tags
-      const words = cleanText.split(' ');
+.then((data) => {
+  const fullHTML = data.summary;
+  
+  // Extract summary text from the full HTML
+  const match = fullHTML.match(/📝 <strong>Summary:<\/strong> (.*)/s);
+  const summaryText = match ? match[1] : "";
 
-      if (words.length > maxWords) {
-        const shortText = words.slice(0, maxWords).join(' ') + "...";
-        summaryBox.innerHTML = `
-          <div class="summary-short">${shortText}</div>
-          <div class="summary-full" style="display: none;">${data.summary}</div>
-          <button class="read-more-btn" onclick="toggleSummary()">Read more</button>
-        `;
-      } else {
-        summaryBox.innerHTML = data.summary;
-      }
+  const maxWords = 50;
+  const words = summaryText.split(' ');
 
-      if (data.image) {
-        coverImg.src = data.image;
-        coverImg.alt = "Book cover";
-        coverImg.style.display = "block";
-      }
-    })
+  if (words.length > maxWords) {
+    const shortText = words.slice(0, maxWords).join(' ') + "...";
+    summaryBox.innerHTML = `
+      ${fullHTML.replace(summaryText, `<span class="summary-short">${shortText}</span><span class="summary-full" style="display:none;">${summaryText}</span> <button class="read-more-btn" onclick="toggleSummary()">Read more</button>`)}
+    `;
+  } else {
+    summaryBox.innerHTML = fullHTML;
+  }
+
+  if (data.image) {
+    coverImg.src = data.image;
+    coverImg.alt = "Book cover";
+    coverImg.style.display = "block";
+  }
+})
     .catch((err) => {
       console.error("Error:", err);
       summaryBox.innerHTML = "Error fetching summary.";
