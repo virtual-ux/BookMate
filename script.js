@@ -1,48 +1,19 @@
-async function searchBook() {
-    const input = document.getElementById("book-input").value.trim();
-    if (!input) return;
+const input = document.getElementById("book-input");
+const summaryBox = document.getElementById("summary");
 
-    document.getElementById("summary").textContent = `Searching for "${input}"...`;
+function searchBook() {
+  const book = input.value.trim();
+  if (!book) return;
 
-    let history = JSON.parse(localStorage.getItem("searchHistory")) || [];
-    history.unshift(input);
-    history = [...new Set(history)].slice(0, 5);
-    localStorage.setItem("searchHistory", JSON.stringify(history));
-    updateRecentSearches();
+  summaryBox.innerHTML = `Searching summary for "<em>${book}</em>"...`;
 
-    try {
-        const response = await fetch(`/.netlify/functions/summary?book=${encodeURIComponent(input)}`);
-        const data = await response.json();
-
-        if (data.summary) {
-            document.getElementById("summary").textContent = data.summary;
-        } else {
-            document.getElementById("summary").textContent = "No summary found.";
-        }
-
-        const fakeRecs = [`${input} Extended`, `Beyond ${input}`, `More like ${input}`];
-        document.getElementById("recommendations").innerHTML = fakeRecs.map(book => `<li>${book}</li>`).join("");
-
-    } catch (err) {
-        console.error("Function error:", err);
-        document.getElementById("summary").textContent = "Error fetching summary.";
-    }
+  fetch(`/.netlify/functions/summary?book=${encodeURIComponent(book)}`)
+    .then((res) => res.json())
+    .then((data) => {
+      summaryBox.innerHTML = data.summary || "No summary found.";
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+      summaryBox.innerHTML = "Error fetching summary.";
+    });
 }
-
-function openGoogle() {
-    const book = document.getElementById("book-input").value.trim();
-    if (book) window.open(`https://www.google.com/search?q=${encodeURIComponent(book)}+free+pdf+download`);
-}
-
-function openYouTube(type) {
-    const book = document.getElementById("book-input").value.trim();
-    let query = type === "audiobook" ? `${book} full audiobook` : `${book} summary`;
-    if (book) window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`);
-}
-
-function updateRecentSearches() {
-    const history = JSON.parse(localStorage.getItem("searchHistory")) || [];
-    document.getElementById("recent-searches").innerHTML = history.map(book => `<li>${book}</li>`).join("");
-}
-
-window.onload = updateRecentSearches;
