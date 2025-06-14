@@ -1,15 +1,15 @@
 exports.handler = async (event) => {
   const book = event.queryStringParameters.book;
-  const serpApiKey = "YOUR_SERPAPI_KEY";
+  const serpApiKey = "YOUR_SERPAPI_KEY_HERE";
 
-  let description = "";
-  let image = "";
   let title = book;
   let authors = "Unknown Author";
+  let description = "";
+  let image = "";
 
   try {
-    // ✅ Step 1: Get title, author, and image from Google Books first
-    const gbUrl = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(book)}`;
+    // 1. Try Google Books API first
+    const gbUrl = `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(book)}`;
     const gbRes = await fetch(gbUrl);
     const gbData = await gbRes.json();
 
@@ -21,20 +21,20 @@ exports.handler = async (event) => {
       image = bookInfo.imageLinks?.thumbnail || "";
     }
 
-    // ✅ Step 2: If summary is missing or too short, use SerpAPI
+    // 2. If description is missing or too short, try SerpAPI
     if (!description || description.trim().length < 50) {
-      const serpUrl = `https://serpapi.com/search.json?q=${encodeURIComponent(book)}+book+summary&api_key=${serpApiKey}`;
-      const serpRes = await fetch(serpUrl);
+      const serpDescUrl = `https://serpapi.com/search.json?q=${encodeURIComponent(book)}+book+summary&api_key=${serpApiKey}`;
+      const serpRes = await fetch(serpDescUrl);
       const serpData = await serpRes.json();
 
       description =
         serpData.knowledge_graph?.description ||
         serpData.organic_results?.[0]?.snippet ||
         serpData.related_questions?.[0]?.snippet ||
-        description; // fallback to previous Google summary
+        description;
     }
 
-    // ✅ Step 3: If image is still missing, use SerpAPI image search
+    // 3. If image is missing, try SerpAPI image search
     if (!image) {
       const serpImgUrl = `https://serpapi.com/search.json?q=${encodeURIComponent(book)}+book+cover&tbm=isch&api_key=${serpApiKey}`;
       const serpImgRes = await fetch(serpImgUrl);
