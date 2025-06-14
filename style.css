@@ -65,6 +65,13 @@ header {
     min-height: 60px;
     margin-bottom: 1rem;
 }
+
+#book-cover{
+    max-width: 200px;
+    margin-top: 1em;
+    margin: auto;
+}
+
 .action-buttons button {
     margin: 0.3rem;
     padding: 0.5rem 1rem;
