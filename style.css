@@ -82,3 +82,17 @@ header {
     color: white;
     cursor: pointer;
 }
+.read-more-btn {
+  margin-top: 10px;
+  background-color: transparent;
+  color: #007bff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.read-more-btn:hover {
+  text-decoration: underline;
+}
+
