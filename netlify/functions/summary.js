@@ -25,7 +25,7 @@ exports.handler = async (event) => {
     const authors = bookInfo.authors?.join(", ") || "Unknown Author";
     let description = bookInfo.description || "No summary available.";
 
-    if (!description) {
+    if (!description) || description.trim().length < 10) {
   const serpTextUrl = `https://serpapi.com/search.json?q=${encodeURIComponent(book)}+book+summary&api_key=${serpApiKey}`;
   const serpRes = await fetch(serpTextUrl);
   const serpData = await serpRes.json();
