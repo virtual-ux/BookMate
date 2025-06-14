@@ -4,30 +4,31 @@ exports.handler = async (event) => {
 
   const url = `https://serpapi.com/search.json?q=${encodeURIComponent(book)} book&api_key=${apiKey}`;
 
-  try {
-    const response = await fetch(url); // native fetch now
+ try {
+    const response = await fetch(url);
     const data = await response.json();
+    const kg = data.knowledge_graph;
 
-    let summary = data.knowledge_graph?.description;
-    if (!summary && data.organic_results?.length > 0) {
-      summary = data.organic_results[0].snippet;
-    }
+    let summary = "No summary found.";
+    let image = "";
 
-    if (!summary) {
-      return {
-        statusCode: 404,
-        body: JSON.stringify({ error: "No summary found." })
-      };
+    if (kg?.description) {
+      summary = `
+        <strong>Title:</strong> ${kg.title}<br>
+        <strong>Author:</strong> ${kg.author}<br>
+        <strong>Summary:</strong> ${kg.description}
+      `;
+      image = kg.images?.[0] || "";
     }
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ summary })
+      body: JSON.stringify({ summary, image })
     };
   } catch (err) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Server Error", details: err.message })
+      body: JSON.stringify({ error: "Server error", details: err.message })
     };
   }
 };
