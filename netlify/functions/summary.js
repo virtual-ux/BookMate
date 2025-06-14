@@ -34,6 +34,7 @@ exports.handler = async (event) => {
   description =
     serpData.knowledge_graph?.description ||
     serpData.organic_results?.[0]?.snippet ||
+    serpData.related_questions?.[0]?.snippet ||
     "No summary available.";
 }
 
