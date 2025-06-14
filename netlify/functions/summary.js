@@ -30,6 +30,14 @@ exports.handler = async (event) => {
   const serpRes = await fetch(serpTextUrl);
   const serpData = await serpRes.json();
 
+      
+  // 🔍 Debugging log
+  console.log("SERP Response Description Candidates:", {
+    knowledgeGraph: serpData.knowledge_graph?.description,
+    organic: serpData.organic_results?.[0]?.snippet,
+    related: serpData.related_questions?.[0]?.snippet
+  });
+
   // Try to extract from knowledge_graph or organic_results
   description =
     serpData.knowledge_graph?.description ||
