@@ -55,10 +55,18 @@ exports.handler = async (event) => {
   const recRes = await fetch(recUrl);
   const recData = await recRes.json();
 
-  const recommendations = recData.organic_results?.slice(0, 5).map(result => ({
-  title: result.snippet?.split(/["“”']/)[1] || result.title || "Untitled"
+const recommendations = recData.organic_results?.slice(0, 5).map(result => {
+  // Try to extract something inside quotes from the snippet (usually a book title)
+  const quotedTitle = result.snippet?.match(/["“”']([^"“”']+)["“”']/)?.[1];
 
-})) || [];
+  return {
+    title: quotedTitle ||
+           result.rich_snippet?.top?.extensions?.[0] || // fallback to structured data if any
+           result.title.split(":")[0].split("|")[0].trim(), // clean title from blog headlines
+    author: "Unknown",
+    image: "", // we'll add images later
+  };
+}) || [];
 
     return {
       statusCode: 200,
