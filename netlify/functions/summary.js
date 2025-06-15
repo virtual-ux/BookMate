@@ -48,10 +48,20 @@ exports.handler = async (event) => {
       ✍️ <strong>Author(s):</strong> ${authors}<br>
       📝 <strong>Summary:</strong> ${description}
     `;
+    // 4. Get recommendations based on genre or fallback to title
+  const recQuery = genre ? `top ${genre} books` : `books like ${title}`;
+  const recUrl = `https://serpapi.com/search.json?q=${encodeURIComponent(recQuery)}&api_key=${serpApiKey}`;
+
+  const recRes = await fetch(recUrl);
+  const recData = await recRes.json();
+
+  const recommendations = recData.organic_results?.slice(0, 5).map(result => ({
+  title: result.title || "Untitled"
+})) || [];
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ summary: summaryHTML, image })
+      body: JSON.stringify({ summary: summaryHTML, image, recommendations })
     };
 
   } catch (err) {
