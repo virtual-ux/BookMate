@@ -56,7 +56,8 @@ exports.handler = async (event) => {
   const recData = await recRes.json();
 
   const recommendations = recData.organic_results?.slice(0, 5).map(result => ({
-  title: result.title || "Untitled"
+  title: result.snippet?.split(/["“”']/)[1] || result.title || "Untitled"
+
 })) || [];
 
     return {
