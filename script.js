@@ -58,3 +58,27 @@ function searchBook() {
       summaryBox.innerHTML = "Error fetching summary.";
     });
 }
+
+// action buttons 
+
+function openGoogle() {
+  const book = input.value.trim();
+  if (!book) return;
+  const url = `https://www.google.com/search?q=${encodeURIComponent(book)}+book+free+download`;
+  window.open(url, "_blank");
+}
+
+function openYouTube(type) {
+  const book = input.value.trim();
+  if (!book) return;
+
+  let query = `${book}`;
+  if (type === "summary") {
+    query += " book summary";
+  } else if (type === "audiobook") {
+    query += " audiobook";
+  }
+
+  const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+  window.open(url, "_blank");
+}
