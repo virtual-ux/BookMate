@@ -1,6 +1,6 @@
 exports.handler = async (event) => {
   const book = event.queryStringParameters.book;
-  const serpApiKey = "YOUR_SERPAPI_KEY_HERE";
+  const serpApiKey = "2f4a2c51026cecfaee418b72db691b80da14f3acc7c8b4d890de5e918c944481";
 
   let title = book;
   let authors = "Unknown Author";
