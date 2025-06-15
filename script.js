@@ -52,6 +52,12 @@ function searchBook() {
     coverImg.alt = "Book cover";
     coverImg.style.display = "block";
   }
+    if (!recentSearches.includes(book)) {
+  recentSearches.unshift(book);
+  if (recentSearches.length > 5) recentSearches.pop(); // Limit to 5
+  localStorage.setItem("searchHistory", JSON.stringify(recentSearches));
+}
+    renderRecentSearches();
 })
     .catch((err) => {
       console.error("Error:", err);
@@ -82,3 +88,25 @@ function openYouTube(type) {
   const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
   window.open(url, "_blank");
 }
+
+let recentSearches = JSON.parse(localStorage.getItem("searchHistory")) || [];
+
+function renderRecentSearches() {
+  const ul = document.getElementById("recent-searches");
+  if (!ul) return;
+
+  ul.innerHTML = "";
+
+  recentSearches.forEach(book => {
+    const li = document.createElement("li");
+    li.textContent = book;
+    li.style.cursor = "pointer";
+    li.addEventListener("click", () => {
+      input.value = book;
+      searchBook();
+    });
+    ul.appendChild(li);
+  });
+}
+
+window.onload = renderRecentSearches;
