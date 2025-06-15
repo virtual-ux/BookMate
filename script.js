@@ -110,3 +110,38 @@ function renderRecentSearches() {
 }
 
 window.onload = renderRecentSearches;
+
+const defaultRecommendations = [
+  "Atomic Habits",
+  "The Power of Now",
+  "Rich Dad Poor Dad",
+  "Think and Grow Rich",
+  "How to Win Friends and Influence People",
+  "The Alchemist",
+  "Deep Work",
+  "The Subtle Art of Not Giving a F*ck",
+  "Sapiens",
+  "Ikigai"
+];
+
+function loadDefaultRecommendations() {
+  const list = document.getElementById("recommendations");
+  list.innerHTML = "";
+
+  defaultRecommendations.forEach(book => {
+    const li = document.createElement("li");
+    li.textContent = book;
+    li.style.cursor = "pointer";
+    li.addEventListener("click", () => {
+      input.value = book;
+      searchBook();
+    });
+    list.appendChild(li);
+  });
+}
+
+// Call it on page load
+window.addEventListener("DOMContentLoaded", () => {
+  loadDefaultRecommendations();
+});
+
