@@ -49,7 +49,7 @@ exports.handler = async (event) => {
       📝 <strong>Summary:</strong> ${description}
     `;
     // 4. Get recommendations based on genre or fallback to title
-  const recQuery = genre ? `top ${genre} books` : `books like ${title}`;
+  const recQuery = `books like ${title}`;
   const recUrl = `https://serpapi.com/search.json?q=${encodeURIComponent(recQuery)}&api_key=${serpApiKey}`;
 
   const recRes = await fetch(recUrl);
