@@ -52,6 +52,23 @@ function searchBook() {
     coverImg.alt = "Book cover";
     coverImg.style.display = "block";
   }
+  // recomendations section
+  if (data.recommendations && Array.isArray(data.recommendations)) {
+  const list = document.getElementById("recommendations");
+  list.innerHTML = ""; // Clear old list
+
+  data.recommendations.forEach(book => {
+    const li = document.createElement("li");
+    li.textContent = book.title;
+    li.style.cursor = "pointer";
+    li.addEventListener("click", () => {
+      input.value = book.title;
+      searchBook();
+    });
+    list.appendChild(li);
+  });
+}
+
     if (!recentSearches.includes(book)) {
   recentSearches.unshift(book);
   if (recentSearches.length > 5) recentSearches.pop(); // Limit to 5
