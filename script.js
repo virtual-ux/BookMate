@@ -126,6 +126,13 @@ function renderRecentSearches() {
   });
 }
 
+input.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    searchBook();
+  }
+});
+
+
 window.onload = renderRecentSearches;
 
 const defaultRecommendations = [
